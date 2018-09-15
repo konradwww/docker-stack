@@ -1,0 +1,37 @@
+version: '3.6'
+
+services:
+  #varnish
+  varnish:
+    image: jonbaldie/varnish
+    volumes:
+    - ./configs/default.vcl:/etc/varnish/default.vcl
+    labels:
+    - "traefik.frontend.rule=Host:${DOMAIN}"
+  #nginx
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - "8091:9090"
+    labels:
+    - "traefik.frontend.rule=Host:nginx.${DOMAIN}"
+    volumes:
+    - ./src:/var/www/html:delegated
+  #php-fom
+  php-fpm:
+    image: php:7.2.9-fpm-alpine3.8
+    ports:
+    - 9000:9000
+    volumes:
+    - ./src:/var/www/html:delegated
+  #reverse-proxy
+  traefik:
+    image: traefik
+    command: --api --docker
+    ports:
+    - "80:80"     # The HTTP port
+    - "8090:8080" # The Web UI (enabled by --api)
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
