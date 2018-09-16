@@ -13,8 +13,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-    - "8091:9090"
     labels:
     - "traefik.frontend.rule=Host:nginx.${DOMAIN}"
     volumes:
