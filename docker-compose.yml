@@ -7,14 +7,14 @@ services:
     volumes:
     - ./configs/default.vcl:/etc/varnish/default.vcl
     labels:
+    - "traefik.enable=true"
     - "traefik.frontend.rule=Host:${DOMAIN}"
+    - "traefik.basic.port=80"
   #nginx
   nginx:
     build:
       context: .
       dockerfile: Dockerfile
-    labels:
-    - "traefik.frontend.rule=Host:nginx.${DOMAIN}"
     volumes:
     - ./src:/var/www/html:delegated
   #php-fom
@@ -31,5 +31,8 @@ services:
     ports:
     - "80:80"     # The HTTP port
     - "8090:8080" # The Web UI (enabled by --api)
+    - "443:443"
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+    - ./configs/acme.json:/acme.json
+    - ./configs/traefik.toml:/traefik.toml

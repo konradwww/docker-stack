@@ -2,6 +2,6 @@
 .idea
 *.iml
 .env
-
+scratch
 out
 gen
