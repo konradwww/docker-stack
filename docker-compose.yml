@@ -17,13 +17,17 @@ services:
       dockerfile: Dockerfile
     volumes:
     - ./src:/var/www/html:delegated
+    labels:
+    - "traefik.enable=false"
   #php-fom
   php-fpm:
     image: php:7.2.9-fpm-alpine3.8
     ports:
-    - 9000:9000
+    - 9000
     volumes:
     - ./src:/var/www/html:delegated
+    labels:
+    - "traefik.enable=false"
   #reverse-proxy
   traefik:
     image: traefik
@@ -36,3 +40,6 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     - ./configs/acme.json:/acme.json
     - ./configs/traefik.toml:/traefik.toml
+    labels:
+    - "traefik.enable=true"
+    - "traefik.frontend.rule=Host:traefik.${DOMAIN}"
