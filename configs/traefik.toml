@@ -6,8 +6,6 @@ defaultEntryPoints = ["https","http"]
 [entryPoints]
   [entryPoints.http]
   address = ":80"
-    [entryPoints.http.redirect]
-    entryPoint = "https"
   [entryPoints.https]
   address = ":443"
   [entryPoints.https.tls]
@@ -22,7 +20,7 @@ exposedByDefault = false
 
 
 [acme]
-email = "info@wocko.net"
+email = "konrad.wocko@gmail.com"
 storage = "acme.json"
 entryPoint = "https"
 onHostRule = true
